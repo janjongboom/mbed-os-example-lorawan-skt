@@ -90,8 +90,8 @@ static lorawan_app_callbacks_t callbacks;
 
 static bool in_skt_join = true;
 static uint8_t deveui[] = { 0x00, 0x80, 0x00, 0x00, 0x04, 0x00, 0x37, 0xD1 };
-static uint8_t appeui[] = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0A };
-uint8_t pseudo_appkey[] = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x06 };
+static uint8_t appeui[] = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x04 };
+uint8_t pseudo_appkey[] = { 0x86, 0xdc, 0x79, 0xda, 0xeb, 0x60, 0x3f, 0x33, 0xef, 0xb5, 0xf2, 0x6c, 0x02, 0xad, 0x60, 0xde };
 static uint8_t real_app_key_output[16];
 uint8_t netid[3] = { 0xd, 0x0, 0x0 }; // 13 = SKT
 
@@ -141,6 +141,7 @@ int main (void)
     connect_params.connection_u.otaa.dev_eui = deveui;
     connect_params.connection_u.otaa.app_eui = appeui;
     connect_params.connection_u.otaa.app_key = pseudo_appkey;
+    connect_params.connection_u.otaa.nb_trials = 10;
 
     retcode = lorawan.connect(connect_params);
 
@@ -257,6 +258,8 @@ static void lora_event_handler(lorawan_event_t event)
 
             break;
         case DISCONNECTED:
+            printf("\r\n Disconnected Successfully \r\n");
+
             if (in_skt_join) {
                 in_skt_join = false;
 
@@ -281,14 +284,14 @@ static void lora_event_handler(lorawan_event_t event)
                 connect_params.connection_u.otaa.dev_eui = deveui;
                 connect_params.connection_u.otaa.app_eui = appeui;
                 connect_params.connection_u.otaa.app_key = real_app_key_output;
+                connect_params.connection_u.otaa.nb_trials = 10;
 
-                uint16_t retcode = lorawan.connect(connect_params);
-                printf("connnect returned %u\n", retcode);
+                int16_t retcode = lorawan.connect(connect_params);
+                printf("connnect returned %d\n", retcode);
                 return;
             }
 
             ev_queue.break_dispatch();
-            printf("\r\n Disconnected Successfully \r\n");
             break;
         case TX_DONE:
             printf("\r\n Message Sent to Network Server \r\n");
