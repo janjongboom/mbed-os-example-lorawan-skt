@@ -1,0 +1,6 @@
+.mbed
+BUILD/
+mbed-lora-radio-drv/
+mbed-os/
+mbed_settings.*
+
