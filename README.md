@@ -19,6 +19,8 @@ SK Telecom uses a non-standard join procedure.
 
 This is a very quick-n-dirty application. You need to set the device EUI, app EUI, pseudo app key, and the Net ID in `main.cpp` (Net ID should be gotten from the first join, but it's not exposed in the stack right now).
 
+**Note:** If you're in the SKT / Wiznet Open House, set the Net ID to `1`, not `13` (public SKT network).
+
 ## Getting started
 
 More information can be found at [mbed-os-example-lorawan](https://github.com/armmbed/mbed-os-example-lorawan).
